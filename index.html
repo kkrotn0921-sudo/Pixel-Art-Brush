@@ -2,13 +2,14 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Art Brush - ドット絵加工ツール</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pixel Art Brush - タップ対応版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             background-color: #f0f2f5;
             font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            touch-action: manipulation;
         }
         .canvas-container {
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -28,6 +29,7 @@
             cursor: crosshair;
             max-width: 100%;
             max-height: 85vh; 
+            touch-action: none;
         }
         .image-editor-area.drag-over {
             border-color: #3b82f6;
@@ -100,14 +102,14 @@
         <!-- Header -->
         <header class="text-center mb-10">
             <h1 class="text-4xl font-black text-gray-900 mb-3 tracking-tight">Pixel Art Brush</h1>
-            <p class="text-gray-500 text-lg font-medium">画像の一部をなぞるだけで、スタイリッシュなドット絵に加工</p>
+            <p class="text-gray-500 text-lg font-medium px-4">画像の一部をなぞるだけで、スタイリッシュなドット絵に加工</p>
         </header>
 
         <main class="canvas-container">
             <!-- Toolbar -->
-            <div class="grid grid-cols-1 lg:grid-cols-6 gap-6 mb-8 border-b border-gray-100 pb-8">
+            <div class="grid grid-cols-2 lg:grid-cols-6 gap-6 mb-8 border-b border-gray-100 pb-8">
                 <!-- 1. Upload -->
-                <div class="space-y-2">
+                <div class="col-span-2 lg:col-span-1 space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider">1. 画像を読み込む</label>
                     <label for="imageLoader" class="flex items-center justify-center w-full px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors">
                         ファイルを選択
@@ -116,7 +118,7 @@
                 </div>
 
                 <!-- 2. Mode -->
-                <div class="space-y-2">
+                <div class="col-span-2 lg:col-span-1 space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider">2. モード</label>
                     <div class="flex p-1 bg-gray-100 rounded-xl">
                         <button id="drawModeBtn" class="mode-button active flex-1 py-1.5 rounded-lg text-xs font-bold">鉛筆</button>
@@ -125,7 +127,7 @@
                 </div>
 
                 <!-- 3. Pixel Size -->
-                <div class="space-y-2">
+                <div class="col-span-1 lg:col-span-1 space-y-2">
                     <div class="flex justify-between items-center">
                         <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider">3. ドットの大きさ</label>
                         <div class="flex items-center gap-1">
@@ -137,7 +139,7 @@
                 </div>
 
                 <!-- 4. Brush Size -->
-                <div class="space-y-2">
+                <div class="col-span-1 lg:col-span-1 space-y-2">
                     <div class="flex justify-between items-center">
                         <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider">4. ブラシの太さ</label>
                         <div class="flex items-center gap-1">
@@ -149,27 +151,27 @@
                 </div>
 
                 <!-- 5. Utility -->
-                <div class="flex flex-col justify-end">
+                <div class="col-span-1 lg:col-span-1 flex flex-col justify-end">
                     <button id="fillAllBtn" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-lg transition-colors text-xs border border-indigo-100 shadow-sm">
                         全体をドット化
                     </button>
                 </div>
 
                 <!-- 6. Actions -->
-                <div class="flex items-end gap-2">
-                    <button id="clearBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2 px-2 rounded-lg transition-colors text-xs">
+                <div class="col-span-1 lg:col-span-1 flex items-end gap-2">
+                    <button id="clearBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2 rounded-lg transition-colors text-xs">
                         リセット
                     </button>
-                    <button id="downloadBtn" class="flex-[1.5] bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-lg shadow-md hover:shadow-lg transition-all text-xs">
+                    <button id="downloadBtn" class="flex-[1.5] bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg shadow-md hover:shadow-lg transition-all text-xs">
                         保存する
                     </button>
                 </div>
             </div>
 
             <!-- Editor Wrapper -->
-            <div class="flex justify-center overflow-auto">
+            <div class="flex justify-center overflow-auto pb-4">
                 <div id="editorWrapper" class="image-editor-area group">
-                    <div id="placeholderText" class="py-48 px-12 text-center min-w-[400px]">
+                    <div id="placeholderText" class="py-48 px-12 text-center min-w-[300px] md:min-w-[400px]">
                         <div class="mb-4 flex justify-center text-gray-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -199,7 +201,7 @@
         </main>
 
         <footer class="text-center py-10">
-            <p>&copy; 2024 Pixel Art Brush Tool. すべての画像処理はあなたのブラウザ内で行われます。</p>
+            <p class="text-xs text-gray-400">&copy; 2024 Pixel Art Brush Tool. すべての画像処理はあなたのブラウザ内で行われます。</p>
         </footer>
     </div>
 
@@ -233,20 +235,67 @@
         let paths = []; 
         let currentPath = [];
 
-        originalImg.ondragstart = (e) => e.preventDefault();
+        // --- Helper: Get Coordinates ---
+        function getPos(e) {
+            const rect = editorWrapper.getBoundingClientRect();
+            let clientX, clientY;
+            
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
 
-        // Mode Switching
-        drawModeBtn.onclick = () => {
-            currentMode = 'draw';
-            drawModeBtn.classList.add('active');
-            eraseModeBtn.classList.remove('active');
-        };
-        eraseModeBtn.onclick = () => {
-            currentMode = 'erase';
-            eraseModeBtn.classList.add('active');
-            drawModeBtn.classList.remove('active');
-        };
+        // --- Event Handlers (Mouse & Touch) ---
+        function startDrawing(e) {
+            if (!imgLoaded) return;
+            if (e.type === 'mousedown' && e.button !== 0) return;
+            isDrawing = true;
+            currentPath = [];
+            currentPath.push(getPos(e));
+            if (e.type === 'touchstart') e.preventDefault();
+        }
 
+        function moveDrawing(e) {
+            if (!isDrawing) return;
+            currentPath.push(getPos(e));
+            drawAll();
+            if (e.cancelable) e.preventDefault();
+        }
+
+        function stopDrawing() {
+            if (isDrawing && currentPath.length > 0) {
+                paths.push({
+                    points: currentPath,
+                    brushSize: parseInt(brushInput.value),
+                    mode: currentMode,
+                    type: 'stroke'
+                });
+            }
+            isDrawing = false;
+            currentPath = [];
+            drawAll();
+        }
+
+        // Mouse Events
+        editorWrapper.addEventListener('mousedown', startDrawing);
+        window.addEventListener('mousemove', moveDrawing);
+        window.addEventListener('mouseup', stopDrawing);
+
+        // Touch Events
+        editorWrapper.addEventListener('touchstart', startDrawing, { passive: false });
+        editorWrapper.addEventListener('touchmove', moveDrawing, { passive: false });
+        editorWrapper.addEventListener('touchend', stopDrawing);
+
+        // --- Logic Functions ---
         function loadFile(file) {
             if (!file || !file.type.startsWith('image/')) return;
             const reader = new FileReader();
@@ -273,107 +322,46 @@
 
         imageLoader.onchange = (e) => loadFile(e.target.files[0]);
 
-        editorWrapper.onmousedown = (e) => {
-            if (!imgLoaded || e.button !== 0) return;
-            isDrawing = true;
-            currentPath = [];
-            addPoint(e);
-            e.preventDefault();
-        };
+        drawModeBtn.onclick = () => { currentMode = 'draw'; drawModeBtn.classList.add('active'); eraseModeBtn.classList.remove('active'); };
+        eraseModeBtn.onclick = () => { currentMode = 'erase'; eraseModeBtn.classList.add('active'); drawModeBtn.classList.remove('active'); };
 
-        window.onmousemove = (e) => {
-            if (!isDrawing) return;
-            addPoint(e);
-            drawAll();
-        };
-
-        window.onmouseup = () => {
-            if (isDrawing && currentPath.length > 0) {
-                paths.push({
-                    points: currentPath,
-                    brushSize: parseInt(brushInput.value),
-                    mode: currentMode,
-                    type: 'stroke'
-                });
-            }
-            isDrawing = false;
-            currentPath = [];
-            drawAll();
-        };
-
-        function addPoint(e) {
-            const rect = editorWrapper.getBoundingClientRect();
-            currentPath.push({
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-            });
-        }
-
-        fillAllBtn.onclick = () => {
-            if (!imgLoaded) return;
-            paths.push({ mode: 'draw', type: 'fill' });
-            drawAll();
-        };
-
-        // Sync Range and Input
-        pixelRange.oninput = (e) => {
-            pixelInput.value = e.target.value;
-            drawAll();
-        };
-        pixelInput.oninput = (e) => {
-            pixelRange.value = e.target.value;
-            drawAll();
-        };
-
-        brushRange.oninput = (e) => {
-            brushInput.value = e.target.value;
-        };
-        brushInput.oninput = (e) => {
-            brushRange.value = e.target.value;
-        };
-
+        fillAllBtn.onclick = () => { if (!imgLoaded) return; paths.push({ mode: 'draw', type: 'fill' }); drawAll(); };
         clearBtn.onclick = clearCanvas;
 
         function clearCanvas() {
             paths = [];
             currentPath = [];
-            const ctx = pixelCanvas.getContext('2d');
-            ctx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
-            drawAll();
+            if (imgLoaded) {
+                const ctx = pixelCanvas.getContext('2d');
+                ctx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
+                drawAll();
+            }
         }
+
+        // Sync inputs
+        pixelRange.oninput = (e) => { pixelInput.value = e.target.value; drawAll(); };
+        pixelInput.oninput = (e) => { pixelRange.value = e.target.value; drawAll(); };
+        brushRange.oninput = (e) => { brushInput.value = e.target.value; };
+        brushInput.oninput = (e) => { brushRange.value = e.target.value; };
 
         function drawMask(ctx, scale = 1) {
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-
             const allActions = [...paths];
             if (currentPath.length > 0) {
-                allActions.push({
-                    points: currentPath,
-                    brushSize: parseInt(brushInput.value),
-                    mode: currentMode,
-                    type: 'stroke'
-                });
+                allActions.push({ points: currentPath, brushSize: parseInt(brushInput.value), mode: currentMode, type: 'stroke' });
             }
-
             allActions.forEach(action => {
-                if (action.mode === 'erase') {
-                    ctx.globalCompositeOperation = 'destination-out';
-                } else {
-                    ctx.globalCompositeOperation = 'source-over';
-                }
-
+                ctx.globalCompositeOperation = (action.mode === 'erase') ? 'destination-out' : 'source-over';
                 if (action.type === 'fill') {
                     ctx.fillStyle = 'white';
                     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                } else if (action.points && action.points.length >= 2) {
+                } else if (action.points && action.points.length >= 1) {
                     ctx.lineWidth = action.brushSize * scale;
                     ctx.strokeStyle = 'white';
                     ctx.beginPath();
                     ctx.moveTo(action.points[0].x * scale, action.points[0].y * scale);
-                    for (let i = 1; i < action.points.length; i++) {
-                        ctx.lineTo(action.points[i].x * scale, action.points[i].y * scale);
-                    }
+                    action.points.forEach(p => ctx.lineTo(p.x * scale, p.y * scale));
                     ctx.stroke();
                 }
             });
@@ -405,12 +393,12 @@
 
         downloadBtn.onclick = () => {
             if (!imgLoaded) return;
-            const outCtx = outputCanvas.getContext('2d');
             const naturalW = originalImg.naturalWidth;
             const naturalH = originalImg.naturalHeight;
             outputCanvas.width = naturalW;
             outputCanvas.height = naturalH;
             const scaleX = naturalW / originalImg.offsetWidth;
+            const outCtx = outputCanvas.getContext('2d');
 
             outCtx.drawImage(originalImg, 0, 0);
             const pixelPartCanvas = document.createElement('canvas');
@@ -431,8 +419,8 @@
             const finalMaskCanvas = document.createElement('canvas');
             finalMaskCanvas.width = naturalW;
             finalMaskCanvas.height = naturalH;
-            const fmCtx = finalMaskCanvas.getContext('2d');
-            drawMask(fmCtx, scaleX);
+            drawMask(finalMaskCanvas.getContext('2d'), scaleX);
+            
             ppCtx.globalCompositeOperation = 'destination-in';
             ppCtx.drawImage(finalMaskCanvas, 0, 0);
             outCtx.drawImage(pixelPartCanvas, 0, 0);
